@@ -26,7 +26,7 @@ public class CustomerController {
 	eGovProperties props;
 	@Autowired
 	private CustomerService customerService;
-
+	@Autowired
 	private TripDetailsService tripDetailsService;
 	@Autowired
 	private LocationService locationService;
