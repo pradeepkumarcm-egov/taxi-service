@@ -27,4 +27,9 @@ public class CabTypeService {
 	public List<CabType> findAll() {
 		return cabTypeRepository.findAll();
 	}
+
+	public CabType findById(String cabtype) {
+		
+		return cabTypeRepository.findOne(Long.valueOf(cabtype));
+	}
 }

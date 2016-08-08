@@ -27,4 +27,12 @@ public class CabDetailService {
 	public List<CabDetail> findAll() {
 		return cabDetailRepository.findAll();
 	}
+
+	public CabDetail findByEmailIdAllIgnoringCase(String emailId) {
+		return cabDetailRepository.findByEmailIdAllIgnoringCase(emailId);
+	}
+
+	public CabDetail save(CabDetail newCCabDetail) {
+		return cabDetailRepository.save(newCCabDetail);
+	}
 }

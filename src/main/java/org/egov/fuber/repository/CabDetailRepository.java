@@ -9,4 +9,6 @@ public interface CabDetailRepository extends JpaRepository<CabDetail, Long> {
 
 	CabDetail findByEmailId(String emailId);
 
+	CabDetail findByEmailIdAllIgnoringCase(String emailId);
+
 }
