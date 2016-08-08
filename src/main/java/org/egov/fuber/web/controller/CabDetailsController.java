@@ -135,6 +135,8 @@ public class CabDetailsController {
 							tripDetailsService.updateTripDetails(tripDtl);
 							markCabAvailableOnCustomerCancellation(tripDtl,
 									true);
+							System.out
+							.println("Trip Ended..");
 						}
 						// TODO: GIVE OPTION TO SELECT OPTION TO START OR STOP
 						// TRIP.

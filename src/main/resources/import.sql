@@ -13,3 +13,5 @@ insert into LOCATION(id,name,latitude,longitude) values (4,'Sarjapur Road',400,4
 
 
 insert into CUSTOMER (id,name,email_id,mobile_number,address) values (1,'Vishal','test@gmail.com','9845530047','Mahalaxmi Layout');
+
+insert into cabdetail(ID, ACTIVE, CAB_NUMBER, COLOUR, DRIVER_NAME, EMAIL_ID, MOBILE_NUMBER, CAB_TYPE) values (1,true,'AG 09 45332','pink','rajeev','mini@gmail.com','8989898990',(select id from cabtype where type='Indica'));

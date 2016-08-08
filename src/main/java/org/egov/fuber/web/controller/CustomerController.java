@@ -67,7 +67,7 @@ public class CustomerController {
 				{
 					if(tripDtl.getTripStatus()!=null && tripDtl.getTripStatus().equals(TripStatus.TRIP_ALLOTED))
 					{
-						System.out.println(" Cab assigned on your last request." + tripDtl.getTripNumber());
+						System.out.println(" Cab assigned on your last request. Trip Number " + tripDtl.getTripNumber());
 						System.out.println(" You want to cancel trip ? Yes/No" );
 					
 						waitOrExit = scanner.next();
@@ -83,7 +83,7 @@ public class CustomerController {
 								markCabAvailableOnCustomerCancellation(tripDtl);
 							
 							System.out
-							.println("Your Last trip cancelled. Thank You");
+							.println("Your Last trip cancelled. Thank You..");
 						} else {
 							System.out
 									.println("Happy Journey...");
@@ -123,6 +123,10 @@ public class CustomerController {
 						if (waitOrExit.equalsIgnoreCase("YES")) {
 							TripDetails tripDetails =	buildTripDetails(customer, startLoctionObject,
 									endLoctionObject, availableCabList);
+							// Remove from waiting list.
+							availableCabsService
+									.removeCabFromAvailableList(availableCabList.get(0));
+
 							System.out
 							.println("Booking confirmed with Number " + tripDetails.getTripNumber() + " Vehicle number " + tripDetails.getCabDetail().getCabNumber() );
 						}else
@@ -152,11 +156,18 @@ public class CustomerController {
 		tripDetails.setCabDetail(availableCabList.get(0).getCabDetail());
 		tripDetails.setCustomer(customer);
 		tripDetails.setStartingPoint(startLoctionObject);
-		tripDetails.setStartingPoint(endLoctionObject);
+		tripDetails.setEndingPoint(endLoctionObject);
+		int randomNumber=getRandomNumber(10,1);
+		tripDetails.setTripNumber("CN"+randomNumber);
 		tripDetails.setTripDate(new Date());
 		tripDetails.setTripStatus(TripStatus.TRIP_ALLOTED);
 		tripDetailsService.createTripDetails(tripDetails);
 		return tripDetails;
+	}
+
+	private int getRandomNumber(int maxValue, int minValue) {
+		Random r = new Random();
+		return  r.nextInt(maxValue-minValue+1)+minValue;
 	}
 
 	private void markCabAvailableOnCustomerCancellation(TripDetails tripDtl) {
