@@ -116,7 +116,9 @@ public class CustomerController {
 									+ availableCabs.getCabDetail().getColour());
 						}
 						System.out
-						.println("Book Cab Yes/No ");
+						.println("---------------------------------------------------------------- ");
+						System.out
+						.println("Book Cab ? Yes/No ");
 						waitOrExit = scanner.next();
 						if (waitOrExit.equalsIgnoreCase("YES")) {
 							TripDetails tripDetails =	buildTripDetails(customer, startLoctionObject,

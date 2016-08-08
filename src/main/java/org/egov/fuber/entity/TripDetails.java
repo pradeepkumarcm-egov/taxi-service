@@ -21,7 +21,6 @@ public class TripDetails {
 	@GeneratedValue
 	private Long id;
 
-	@NotNull
 	@GeneratedValue
 	private String tripNumber;
 	@NotNull
