@@ -31,4 +31,9 @@ public class TripDetailsService {
 	public TripDetails checkTripAssignedToSelectedCab(String emailId) {
 		return tripDetailsRepository.checkTripAssignedToSelectedCab(emailId);
 	}
+
+	public TripDetails checkTripAssignedToSelectedCustomer(String emailId) {
+		return tripDetailsRepository.checkTripAssignedToSelectedCustomer(emailId);
+		
+	}
 }

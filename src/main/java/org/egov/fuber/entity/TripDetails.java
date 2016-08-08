@@ -22,6 +22,7 @@ public class TripDetails {
 	private Long id;
 
 	@NotNull
+	@GeneratedValue
 	private String tripNumber;
 	@NotNull
 	private Date tripDate;

@@ -14,4 +14,7 @@ public interface TripDetailsRepository extends JpaRepository<TripDetails, Long> 
 	
 	@Query("select u from TripDetails u where u.cabDetail.emailId = :emailIds and u.tripStatus in ('TRIP_ALLOTED','TRIP_STARTED')")
 	TripDetails checkTripAssignedToSelectedCab(@Param("emailIds") String emailIds);
+
+	@Query("select u from TripDetails u where u.customer.emailId = :emailIds and u.tripStatus in ('TRIP_ALLOTED','TRIP_STARTED')")
+	TripDetails checkTripAssignedToSelectedCustomer(@Param("emailIds") String emailId);
 }
