@@ -88,7 +88,7 @@ public class CabDetailsController {
 						System.out
 								.println("You are online. Please wait for next trip.");
 					}
-				} else if (tripDtl != null) {
+				} else if (tripDtl != null) { 
 					if (tripDtl.getTripStatus() != null
 							&& tripDtl.getTripStatus().equals(
 									TripStatus.TRIP_ALLOTED)) {
@@ -138,7 +138,8 @@ public class CabDetailsController {
 						}
 						// TODO: GIVE OPTION TO SELECT OPTION TO START OR STOP
 						// TRIP.
-					} else {
+					}
+				}else {
 						System.out.println("Please select your location");
 						for (Location locations : locationService.findAll()) {
 							System.out.println("" + locations.getId() + " "
@@ -159,7 +160,7 @@ public class CabDetailsController {
 
 					}
 				}
-			}
+			
 		}
 		return null;
 	}
