@@ -24,7 +24,15 @@ public class AvailableCabsService {
 		return availableCabsRepository.save(availableCabs);
 	}
 
+	public AvailableCabs checkCabAlreadyInQueue(String emailId) {
+		return availableCabsRepository.findByCabDetailEmailId(emailId);
+	}
+	
 	public List<AvailableCabs> findAll() {
 		return availableCabsRepository.findAll();
+	}
+	@Transactional
+	public void removeCabFromAvailableList(AvailableCabs cabPresentInList) {
+		 availableCabsRepository.delete(cabPresentInList);
 	}
 }

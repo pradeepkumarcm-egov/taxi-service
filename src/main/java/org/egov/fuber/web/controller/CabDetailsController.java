@@ -2,10 +2,16 @@ package org.egov.fuber.web.controller;
 
 import java.util.Scanner;
 
+import org.egov.fuber.entity.AvailableCabs;
 import org.egov.fuber.entity.CabDetail;
 import org.egov.fuber.entity.CabType;
+import org.egov.fuber.entity.Location;
+import org.egov.fuber.entity.TripDetails;
+import org.egov.fuber.service.AvailableCabsService;
 import org.egov.fuber.service.CabDetailService;
 import org.egov.fuber.service.CabTypeService;
+import org.egov.fuber.service.LocationService;
+import org.egov.fuber.service.TripDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +21,17 @@ public class CabDetailsController {
 
 	@Autowired
 	private CabDetailService cabDetailService;
+
 	@Autowired
-	private	CabTypeService cabTypeService;
+	private AvailableCabsService availableCabsService;
+	@Autowired
+	private CabTypeService cabTypeService;
+	@Autowired
+	private TripDetailsService tripDetailsService;
+
+	@Autowired
+	private LocationService locationService;
+
 	@RequestMapping("/cab")
 	public String cabDetails() {
 
@@ -26,7 +41,7 @@ public class CabDetailsController {
 		System.out.println("1. New CabDetail");
 		System.out.println("2. Existing CabDetail");
 		int CabDetailtype = scanner.nextInt();
-		String emailId, mobilenumber, username, address;
+		String emailId, mobilenumber, username, address, waitOrExit, location;
 
 		if (CabDetailtype == 1) {
 			createNewCabDetail(scanner);
@@ -37,12 +52,73 @@ public class CabDetailsController {
 			System.out.println(" Please enter your email id ..");
 			emailId = scanner.next();
 
-			CabDetail CabDetail = cabDetailService
+			CabDetail cabDetail = cabDetailService
 					.findByEmailIdAllIgnoringCase(emailId);
-			System.out.println("Welcome Driver" + CabDetail.getDriverName());
+			
+			if(cabDetail==null)
+			{
+				System.out.println("Invalid email Id.. Try again..");
+			}else
+			{		
+			System.out.println("Welcome Driver" + cabDetail.getDriverName());
 
+			AvailableCabs cabPresentInList = availableCabsService
+					.checkCabAlreadyInQueue(emailId);
+			
+			TripDetails tripAlreadyAssigned = tripDetailsService
+					.checkTripAssignedToSelectedCab(emailId);
+			
+			
+			// Mean cab already in available cab list.
+			if (cabPresentInList != null) {
+				System.out
+						.println(" You are in queue. No cabs assigned yet. You want to go offline ?");
+				System.out.println("Yes/No");
+				waitOrExit = scanner.next();
+
+				if (waitOrExit.equalsIgnoreCase("YES")) {
+					System.out
+					.println("Removing from list --------");
+					
+					// Remove from waiting list.
+					availableCabsService
+							.removeCabFromAvailableList(cabPresentInList);
+					
+					System.out
+					.println("You are Offline Now. Thank You");
+				} else {
+					System.out
+							.println("You are online. Please wait for next trip.");
+				}
+			} 
+			else if(tripAlreadyAssigned!=null)
+			{
+				System.out
+				.println(" Trip Assigned to your cab." + tripAlreadyAssigned.getTripNumber());
+				
+				//TODO: GIVE OPTION TO SELECT OPTION TO START OR STOP TRIP.
+			}
+			else {
+				System.out.println("Please select your location");
+				for (Location locations : locationService.findAll()) {
+					System.out.println("" + locations.getId() + " "
+							+ locations.getName());
+				}
+				location = scanner.next(); //select location and go online.
+
+				Location locationObject = locationService.findById(location);
+				// Go Online
+				AvailableCabs addNewCabToAvailableList = new AvailableCabs();
+				addNewCabToAvailableList.setCabDetail(cabDetail);
+				addNewCabToAvailableList.setLocation(locationObject);
+				availableCabsService
+						.createAvailableCabs(addNewCabToAvailableList);
+				System.out
+				.println("You are online. Please wait ....");
+
+			}
 		}
-
+		}
 		return null;
 	}
 
@@ -50,7 +126,7 @@ public class CabDetailsController {
 		String emailId;
 		String mobilenumber;
 		String username;
-		String colour,cabNumber,cabtype;
+		String colour, cabNumber, cabtype;
 		System.out.print(" Please enter email id : ");
 		emailId = checkEmailAlreadyPresent(scanner);
 		System.out.println(" Please enter cab number : ");
@@ -61,25 +137,25 @@ public class CabDetailsController {
 		username = scanner.next();
 		System.out.println(" Please enter cab colour : ");
 		colour = scanner.next();
-		
+
 		System.out.println(" Select Cab Type : ");
-		for (CabType cabtypes: cabTypeService.findAll())
-		{
-			System.out.println(""+cabtypes.getId()+" "+cabtypes.getType());
+		for (CabType cabtypes : cabTypeService.findAll()) {
+			System.out
+					.println("" + cabtypes.getId() + " " + cabtypes.getType());
 		}
 		cabtype = scanner.next();
-		
-		CabType cabTypeSelected=cabTypeService.findById(cabtype);
-		
+
+		CabType cabTypeSelected = cabTypeService.findById(cabtype);
+
 		CabDetail newCCabDetail = new CabDetail();
 		newCCabDetail.setMobileNumber(mobilenumber);
 		newCCabDetail.setEmailId(emailId);
 		newCCabDetail.setDriverName(username);
 		newCCabDetail.setCabNumber(cabNumber);
-		newCCabDetail.setCabType(cabTypeSelected); 
+		newCCabDetail.setCabType(cabTypeSelected);
 		newCCabDetail.setActive(true);
 		newCCabDetail.setColour(colour);
-		
+
 		newCCabDetail = cabDetailService.save(newCCabDetail);
 
 		System.out.println(" CabDetail data saved successfully. "

@@ -27,4 +27,8 @@ public class TripDetailsService {
 	public List<TripDetails> findAll() {
 		return tripDetailsRepository.findAll();
 	}
+
+	public TripDetails checkTripAssignedToSelectedCab(String emailId) {
+		return tripDetailsRepository.checkTripAssignedToSelectedCab(emailId);
+	}
 }

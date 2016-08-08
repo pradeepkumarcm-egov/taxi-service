@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AvailableCabsRepository extends
 		JpaRepository<AvailableCabs, Long> {
 
+	AvailableCabs findByCabDetailEmailId(String emailId);
+
 }
